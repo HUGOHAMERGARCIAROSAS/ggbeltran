@@ -66,11 +66,14 @@ Route::resource('/roles', 'Admin\RoleController')->names('roles');
 //USUARIO
 Route::resource('/users', 'Admin\UserController')->names('users');
 Route::put('users/delete/{id}', 'Admin\UserController@update1')->name('users.update1');
+Route::get('/getPersonal','Admin\UserController@GetPersonal');
 
 //DOCUMENTOS DE PERSONAL
 
 Route::resource('/documentosP', 'Admin\DocumentoPController')->names('documentosP');
 Route::put('documentosP/delete/{id}', 'Admin\DocumentoPController@update1')->name('documentosP.update1');
+Route::post('/saveDocumentopP','Admin\DocumentoPController@store');
+
 
 //DOCUMENTOS DE VEHÍCULO
 Route::resource('/documentosV', 'Admin\DocumentoVController')->names('documentosV');
@@ -122,6 +125,7 @@ Route::put('/terciarios/delete/{id}', 'EmpresasTerciariasController@update1')->n
 //PROVEEDOR PRODUCTO
 Route::resource('proproducto','ProveedorProductoController')->names('proproductos');
 Route::put('/proveedor_producto/delete/{id}', 'ProveedorProductoController@update1')->name('proproductos.update1');
+Route::get('proveedorProducto','ProveedorProductoController@getProveedorProductos');
 
 //PRODUCTO
 Route::resource('productos','ProductosController')->names('productos');

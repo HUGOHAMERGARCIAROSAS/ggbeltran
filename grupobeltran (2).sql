@@ -1,11 +1,5 @@
--- phpMyAdmin SQL Dump
--- version 5.0.3
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 19-07-2021 a las 06:51:45
--- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.4.11
+CREATE DATABASE grupobeltran;
+use grupobeltran;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;

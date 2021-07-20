@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Operacion;
 use App\Models\OperacionDetalle;
 use App\Models\Producto;
-use DB;
+use App\Models\Proveedor;
+use App\Models\TerciarioProveedor;
+use Illuminate\Support\Facades\DB;
+
 
 class OperacionController extends Controller
 {
@@ -21,7 +24,8 @@ class OperacionController extends Controller
         $productos = Producto::
         where('activo', 1)
         ->get();
-        return view('pages.operaciones.compra')->with(compact('productos'));
+        $proveedores=TerciarioProveedor::where('tipo',2)->where('activo',1)->get();
+        return view('pages.operaciones.compra')->with(compact('productos','proveedores'));
     }
 
     public function storeCompra(Request $request){

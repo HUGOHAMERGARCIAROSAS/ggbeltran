@@ -15,7 +15,8 @@
                       padding-top: 10px;
                   }
               </style>
-              <div class="row">
+
+              <div class="row">>
                   <div class="col-md-12">
                       <label for="">Razón Social:</label>
                       <input type="text" class="form-control" name="razon_social">

@@ -8,7 +8,9 @@
                             <div class="row">
                                     <div class="col-sm-6">
                                         <label>Proveedor: </label>
-                                        <input type="text" class="form-control" v-model="operacion.cliente_proveedor" required>
+                                        <select class="form-control form-control-sm" v-model="operacion.cliente_proveedor" required>
+                                             <option v-for="(proveedor,index) in proveedores" :value="proveedor.id"  :key="index" >{{proveedor.razon_social}}</option>
+                                        </select>
                                     </div>
                                     <div class="col-sm-6">
                                         <label>F. de Emisión: </label>
@@ -105,7 +107,8 @@
                     igv: '',
                     total: '',
                     detalle_facturacion:[]
-                }
+                },
+                proveedores:[]
             }
         },
             mounted() {
@@ -186,8 +189,19 @@
                 this.detallefacturacion.splice(index, 1);
                 toastr.info('Producto eliminado de la Compra!');
                 this.calcularFacturacion();
-            },
+            }
                 
+        },
+        beforeCreate(){
+            axios.get('/proveedorProducto')
+                .then(res=>{
+                    console.log(res.data);
+                    for(var value of res.data){
+                        this.proveedores.push({
+                            id:value.id,razon_social:value.razon_social
+                        })
+                    }
+               });
         },
         created(){
             Bus.$on("DetalleFacturacion", (data) => {

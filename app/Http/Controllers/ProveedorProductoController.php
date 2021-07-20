@@ -15,6 +15,7 @@ class ProveedorProductoController extends Controller
 
     public function store(Request $request)
     {
+        ////TIPO 2 ->ES PROVEEDOR DE PRODUCTO
         $tercero = new TerciarioProveedor();
         $tercero->razon_social  = $request->razon_social;
         $tercero->ruc  = $request->ruc;
@@ -22,6 +23,7 @@ class ProveedorProductoController extends Controller
         $tercero->activo  = 1;
         $tercero->telefono  = $request->telefono;
         $tercero->direccion  = $request->direccion;
+        $tercero->telefono2=$request->telefono2;
         $tercero->save();
         return back();
 
@@ -46,5 +48,10 @@ class ProveedorProductoController extends Controller
         $tercero->activo  = 0;
         $tercero->save();
         return back();
+    }
+    public function getProveedorProductos()
+    {
+        $proveedor = TerciarioProveedor::where('tipo','2')->where('activo','1')->get();
+        return $proveedor;
     }
 }

@@ -8,9 +8,9 @@
                     <div class="col-md-4">
                         <label>Tipo Gasto Operativo</label>
                         <select @change="ObtenerGastos()" v-model="tipoComprobante" class="form-control form-control-sm" name="tipoGasto" id="tipoGasto">
-                            <option value="0">SELECCIONAR</option>
+                            <option value="0" selected>SELECCIONAR</option>
                             <option value="1">CON COMPROBANTE</option>
-                            <option value="2" selected>SIN COMPROBANTE</option>
+                            <option value="2" >SIN COMPROBANTE</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -52,15 +52,14 @@
                             </table>
                         </div>
                     </div>
-        </div>
-           
+        </div>        
     </div>
 </template>
 <script>
 export default {
     data() {
         return{
-            tipoComprobante:"2",
+            tipoComprobante:"0",
             gastos:[]
         }
     },

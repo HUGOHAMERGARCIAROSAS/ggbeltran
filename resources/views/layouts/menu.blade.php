@@ -40,7 +40,7 @@
                                 <li class="active"><a href="{{route('clientes.index')}}">Listado de Clientes</a></li>
                                 @endcan
                                 <li class="active"><a href="{{route('terciarios.index')}}">Empresas Terciarias</a></li>
-                                <li class="active"><a href="{{route('proproductos.index')}}">Proveedor de Producto</a></li>
+                                
                             </ul>
                         </li>
                         <li>
@@ -71,8 +71,9 @@
                         <li>
                             <a href="#Widgets" class="has-arrow"><i class="icon-puzzle"></i> <span>COMPRAS</span></a>
                             <ul>
-                                <li class="active"><a href="{{route('unidades.index')}}">PROVEEDORES</a></li>
-                                <li class="active"><a href="{{route('operaciones')}}">LISTADO</a></li>
+                                <li class="active"><a href="{{route('proproductos.index')}}">PROVEEDORES</a></li>
+                                <li class="active"><a href="{{ route('productos.index') }}">PRODUCTOS</a></li>
+                                <li class="active"><a href="{{route('operaciones')}}">REGISTRO DE COMPRAS</a></li>
                             </ul>
                         </li>
                         <li>

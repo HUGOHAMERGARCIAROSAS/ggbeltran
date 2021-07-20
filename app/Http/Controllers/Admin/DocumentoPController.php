@@ -73,6 +73,7 @@ class DocumentoPController extends Controller
         $documentoP->fecha_vencimiento = $request->fecha_vencimiento;
         $documentoP->activo = 1;
         $documentoP->estado = 1;
+        $documentoP->usuario_insert=auth()->user()->name;
         // dd($request->file('archivos'));
         if ($request->file('archivos')) {
             // dd($request->file('archivos'));

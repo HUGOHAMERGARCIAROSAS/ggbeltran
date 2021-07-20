@@ -1,0 +1,43 @@
+USE [Hidrandina]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_HINDRANDINA]    Script Date: 22/04/2021 18:26:21 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[SP_HINDRANDINA]
+ @periodo int
+AS
+DECLARE @idPersona int, @idSuministro int,@idTarifa [char](18),@idSector [char](18),@consumo numeric(12,2), @rango numeric(9,2),@calcular numeric(12,2),
+@valor1 [numeric](9, 2),@valor2 [numeric](9, 2),@valor3 [numeric](9, 2),@fechaEmision [char](18),@fechaVencimiento [char](18),@idCuenta int
+ DECLARE c_calculo CURSOR FOR
+		select distinct P.idPersona,S.idSuministro,S.idTarifa,S.idSector,consumo=LecturaActual-LecturaAnterior,T.Valor1,t.Valor2,t.Valor3
+		from Persona P inner join Suministro S 
+		on P.idPersona=S.idPersona inner join Consumo C
+		on C.idSuministro=S.idSuministro inner join PeriodoTarifa T
+		on T.idPeriodo=C.idPeriodo
+		where C.idPeriodo= 1--@periodo
+OPEN c_calculo   --- Abrir cursor
+FETCH c_calculo INTO  @idPersona,@idSuministro,@idTarifa,@idSector, @consumo ,@valor1,@valor2,@valor3 --- lEER CURSOR
+WHILE @@FETCH_STATUS=0
+BEGIN
+	IF @consumo<100
+		begin
+			set @calcular=@valor1*@consumo
+		end
+	IF @consumo>=100 and @consumo<=200
+		begin
+			set @calcular=@valor2*@consumo
+		end
+	IF @consumo>200
+		begin
+			set @calcular=@valor3*@consumo
+		end
+	set @fechaEmision=(select FechaEmision from Periodo where idPeriodo=@periodo)
+	set @fechaVencimiento=(select FechaVencimiento from Periodo where idPeriodo=@periodo)
+	insert CuentaCorriente(FechaEmision,FechaVencimiento,idSuministro,idPeriodo)
+	values (@fechaEmision,@fechaVencimiento,@idSuministro,@periodo);
+	set @idCuenta = @@IDENTITY
+END
+CLOSE c_calculo
+ DEALLOCATE c_Calculo

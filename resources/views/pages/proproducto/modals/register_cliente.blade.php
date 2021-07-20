@@ -16,6 +16,12 @@
                     }
                 </style>
                 <div class="row">
+                    <div class="col-md-6">
+                        <label for="">RUC/DNI:</label>
+                        <input type="text" class="form-control" name="ruc">
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12">
                         <label for="">Razón Social:</label>
                         <input type="text" class="form-control" name="razon_social">
@@ -23,11 +29,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="">Documento:</label>
-                        <input type="text" class="form-control" name="ruc">
+                        <label for="">Teléfono 1:</label>
+                        <input type="text" class="form-control" name="telefono2">
                     </div>
                     <div class="col-md-6">
-                        <label for="">Teléfono:</label>
+                        <label for="">Teléfono 2:</label>
                         <input type="text" class="form-control" name="telefono">
                     </div>
                 </div>

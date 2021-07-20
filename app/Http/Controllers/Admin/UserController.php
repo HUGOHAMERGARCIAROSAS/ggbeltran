@@ -129,4 +129,8 @@ class UserController extends Controller
     {
         
     }
+    public function GetPersonal(){
+        $personal = User::where('tipo','1')->get();
+        return $personal;
+    }
 }
