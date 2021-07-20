@@ -1,0 +1,471 @@
+<?php
+require_once("../../config/conexion.php" );
+require_once("../../includes/common.php" );
+require_once("../../includes/functions.php" );
+
+$cod_cta=$_GET["cod"];
+
+$consss2="select top 1 convert(varchar(14),fecha_remite,105) as fecha_remite from coactivo_cta_detalle where coactivo_cta_id='".$cod_cta."'";
+$database->setQuery( $consss2 );	
+$myss = null;
+$database->loadObject($myss);
+$fecch= $myss->fecha_remite ;
+
+
+$consss="exec sp_datos_contribuyente @tipo = 5,@end='".$cod_cta."'";
+$database->setQuery( $consss );	
+$my = null;
+$database->loadObject($my);
+
+
+$cod=$my->persona_ID;
+$exp = $my->expediente_coactivo_ID;
+$anio = $my->anio_expediente."-T";
+$contri = $my->texto;
+$entidad = "V�ctor Larco Herrera";
+$unidad = "UNIDAD DE EJECUCI�N COACTIVA";
+$doc =  $my->documento;
+if($my->idubica==15)$vvm="-".$my->ubica;
+$dirr= $my->direccion."".$vvm ;
+
+
+
+
+$sql = "exec usp_infocliente @persona = '".$cod."',  @tipoconsulta = 51 ";
+$database->setQuery( $sql );	
+$mys = null;
+$database->loadObject($mys);
+$relac = $mys->relacion;
+$nombrrelac = $mys->nombres;
+$docrelac = $mys->documento;
+$tiporelac=$mys->tipo_relacion;
+//comienzo Tributos
+$detl2="exec sp_cuentacoactiva @tipo = 28, @coactivoctaid='".$cod_cta."'";
+
+$database->setQuery( $detl2 );
+$row_ct22 = $database->loadObjectList();
+
+$var_t=array();
+
+for ($j=0;$j<count($row_ct22);$j++) {
+$arraysj = $row_ct22[$j];
+
+$var_t[$j]=$arraysj->descripcion;
+}
+$mat=implode(' - ',$var_t);
+
+
+ 
+$m_int="select count(*) from coactivo_cta where coactivo_cta_ID='".$cod_cta."' and idmulta!=''";
+$database->setQuery( $m_int );
+$matsd = $database->loadResult();
+
+if($mat=="" && $matsd>0){$mat="MULTA ADMINISTRATIVA"; $exp = preg_replace("[ a-zA-Z]","",$exp);$anio = preg_replace("[ a-zA-Z]","",$anio);$anio=$anio."-M";}
+//Fin Trib
+
+//Formato Valores
+
+
+$linea="select mot_determ,base_legal,mensaje,pie_pag from formato_valores where formato_valores_ID='1'";
+$database->setQuery( $linea );	
+$mens = null;
+$database->loadObject($mens);
+$mensajee = $mens->mensaje;
+$base_le = $mens->base_legal;
+$detere = $mens->mot_determ;
+$pie_pag = $mens->pie_pag;
+//
+
+
+list($dia_hoy, $mes_hoy, $anio_hoy) =  multiexplode(array("/","-"), $my->fecha_emision);  
+
+$mess=FechaFormateada1($my->fecha_emision);
+
+$numes=num2letras($dia_hoy);
+$anioo=num2letras_may($anio_hoy);
+
+$fech=$numes." de ".$mess." del a�o ".$anioo;
+
+
+$dett="select coactivo_cta_detalle_ID,monto,nro_dias,interes_moratorio,deuda_actual,descripcion,cd.tributos_id ,
+convert(varchar(14),fecha_remite,105) as fecha_remite
+from coactivo_cta_detalle as cd inner join tributos as tr on cd.tributos_id=tr.tributos_id
+ where coactivo_cta_ID='".$cod_cta."' order by monto desc";
+$database->setQuery( $dett );
+$row_det = $database->loadObjectList();
+$countt=count($row_det);
+
+
+$res = "select coactivo_cta_ID,interes,persona_ID,month(fecha_emision) as mess,convert(varchar(14),fecha_emision,105) as fecha_emision,monto,grupo,anio_ini,anio_fin,
+interes_mor,monto_tota
+ from coactivo_cta  where coactivo_cta_ID='".$cod_cta."'";
+$database->setQuery( $res );	
+$row = null;
+$database->loadObject($row);
+// sum(pago) as abono,
+$dett=" 
+select convert(varchar(14),fech_actual,103) as fechaemite,convert(varchar(14),fech_vence,103) as fechavence, nrdias ,vv.numero,
+ csvalor= CASE tipo_valor
+         WHEN '1' THEN 'RD'
+         WHEN '2' THEN 'RD'
+		 WHEN '3' THEN 'OP'
+		 WHEN '4' THEN 'RD'
+		  WHEN '5' THEN 'RD'
+		 ELSE 'RD'
+      END ,tpvalor= CASE tipo_valor
+          WHEN '1' THEN 'Impuesto Predial'
+         WHEN '2' THEN 'Arbitrios Municipales'
+		 WHEN '3' THEN 'Impuesto Predial'
+		 WHEN '4' THEN 'Alcabala'
+		  WHEN '5' THEN 'Espectaculos Publicos no Deportivos'
+		 ELSE 'No Hay' 
+      END ,tipo_valor,anio_valor,deuda_act,int_valores,pagcta,int_moratorio
+from coact_interes c inner join coact_dinteres cc on c.idcoactint=cc.idcoactint 
+inner join valores vv on vv.valor_id=cc.valor_id
+ where coactivo_cta_id='".$cod_cta."' and c.activo='1'";
+$database->setQuery( $dett );
+$row_ct = $database->loadObjectList();
+$countt=count($row_ct);
+
+$m_int="select valor from parametros where codigo='12' and estado='1' and anio=dbo.GetAnio()";
+$database->setQuery( $m_int );
+$mon_ints = $database->loadResult();
+
+$var_p=array();
+$cadena_p=$row->monto_tota;
+$longitud_p=strlen($cadena_p);
+$val=0;
+for ($i_p=1;$i_p<$longitud_p+1;$i_p++) {
+
+$var_p[$i_p]=substr($cadena_p, $i_p-1,1);
+if($var_p[$i_p]==".")
+{$val=1;
+}
+
+}
+$todo_total=implode('',$var_p);
+
+if($val==0)
+{
+$todo_total=$todo_total.".00";
+}
+
+
+
+?>
+<style type="text/css">
+<!--
+.Estilo1 {font-size: 11px}
+.Estilo2 {font-size: 12px}
+-->
+</style>
+<html> 
+<head> 
+<title>Imprimir </title> 
+<script language="javascript"> 
+function imprimir() 
+{ 
+
+window.print() ; 
+} 
+</script> 
+</head> 
+<body onLoad="imprimir();"> 
+<link href="../../css/styles.css" rel="stylesheet" type="text/css" />
+
+<table width="100%" border="0" cellpadding="0" >
+  <tr>
+    <td width="6%" rowspan="3"><img src="../../images/image.png" width="40" height="50"></td>
+    <td colspan="3"><p class="Estilo2"><strong><?php echo _titulomuni();?></strong></p></td>
+  </tr>
+  <tr>
+    <td width="45%"><div align="center" class="Estilo2"><strong>OFICINA  DE EJECUCI&Oacute;N COACTIVA</strong></div></td>
+    <td colspan="2">&nbsp;</td>
+  </tr>
+  <tr>
+    <td   colspan="3"><div class="Estilo2">AV. VICTOR LARCO HERRERA No. 204  - BUENOS AIRES; Telf. 481537</div></td>
+  </tr>
+</table>
+<hr width="100%">
+
+
+<table width="100%" border="0">
+  <tr>
+    <td width="19%"><span class="Estilo1">EXPEDIENTE</span></td>
+    <td width="2%"><span class="Estilo1"><strong>:</strong></span></td>
+    <td width="79%"><span class="Estilo1"><strong><?php echo $exp;?>-<?php echo $anio;?>-OEC-<?PHP echo _inicialMuni();?></strong></span></td>
+  </tr>
+  <tr>
+    <td><span class="Estilo1">EJECUTANTE</span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><strong><?php echo _titulomuni();?></strong></span></td>
+  </tr>
+  <tr>
+    <td><span class="Estilo1">EJECUTADO(A)</span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><strong><?php echo reemplaza(trim($contri));?></strong></span></td>
+  </tr>
+  <tr>
+    <td><span class="Estilo1">DNI./RUC/CE/OTRO</span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><strong><?php echo $doc;?></strong></span></td>
+  </tr>
+ <?php if($relac!=''){ ?>
+   <tr>
+   
+    <td><span class="Estilo1"><?php if($tiporelac!='4')echo "EJECUTADO(A)"; else echo "REPRESENTANTE";?></span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><strong><?php echo reemplaza($nombrrelac);?></strong></span></td>
+  </tr>
+   <tr>
+    <td><span class="Estilo1">DNI./RUC/CE/OTRO</span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><strong><?php echo $docrelac;?></strong></span></td>
+  </tr>
+  <?php }?>
+  <tr>
+    <td><span class="Estilo1">DOMICILIO  FISCAL&nbsp; </span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><B><?php echo $dirr;?></B></span></td>
+  </tr>
+  <tr>
+    <td><span class="Estilo1">MATERIA DE COBR </span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><strong><?php echo $mat;?></strong></span></td>
+  </tr>
+  <tr>
+    <td><span class="Estilo1">CODIGO</span></td>
+    <td><span class="Estilo1"><strong>:</strong></span></td>
+    <td><span class="Estilo1"><strong><?php echo $cod;?></strong></span></td>
+  </tr>
+</table>
+<p><strong><u>RESOLUCI&Oacute;N NUMERO UNO</u></strong><strong>:</strong><br>
+  V&iacute;ctor Larco Herrera,  <?php echo $fech;?>.-</p>
+<div align="justify"><span class="Estilo2"><strong>AUTOS Y VISTOS</strong>; Dado cuenta con los valores, cargos de notificaci&oacute;n, constancia de exigibilidad que antecede;
+ <strong>Y CONSIDERANDO:</strong> 
+  <!--<strong><u>PRIMERO</u>:</strong> Que, inicialmente la Municipalidad Distrital de V&iacute;ctor Larco  Herrera, en su condici&oacute;n de administraci&oacute;n tributar&iacute;a, mediante <strong>Resoluci&oacute;n  de Determinaci&oacute;n No. 130-2008-ORC-MDVLH</strong>, notific&oacute; al contribuyente<strong> <?php //echo $contri;?></strong><strong>,</strong> quien  adeuda los conceptos de <strong><em><?php //echo $mat;?> </em></strong>por la cantidad de <strong>S/.  <?php //echo $row->
+  monto_tota;?> (
+  <?php //echo strtoupper(num2letras($r_datos));?> 
+  y 
+  <?php //echo $resto;?>
+  /100 NUEVOS SOLES)
+
+  </strong>correspondiente al a&ntilde;o <strong><u>
+  <?php //echo $row->anio_ini;?>  
+  hasta 
+  <?php // echo FechaFormateada1($row->fecha_emision);?>
+  del a&ntilde;o
+  <?php // echo $row->anio_fin; ?>
+  
+  
+  
+</u></strong>. --><?php echo $mensajee." <b>".trim($contri); if($tiporelac!='4' && $tiporelac!=''){echo " / ".$nombrrelac."</b>";}
+ echo ",";   echo "</b>";?> el pago de su deuda tributaria, la misma que a la fecha incluye los intereses moratorios acotados desde el d�a siguiente
+ del vencimiento del plazo para el pago hasta la fecha de expedici�n de la presente Resoluci�n, de conformidad a lo prescrito en el Art. 3� num. 2� 
+ concordante con el Art. 33� del T.U.O. del C�digo Tributario, concordante con lo prescrito en la Ordenanza Municipal No. 003-2019-MDVLH ratificada por 
+ Acuerdo de Concejo No. 046-2019-MPT y Ordenanza Municipal 007-2020-MDVLH; 
+ con lo cual se ha generado la deuda tributaria que a continuaci�n se detalla:  </span></div>
+<br/>
+
+<?php
+
+
+$st = new sTable( "dataCols" );
+$st->simpleTable("dataCols","width='100%'");
+
+$st->addRow();
+$st->addCellth( "<b>VALOR DE COBRANZA</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='8%' colspan='2'" );
+$st->addCellth( "<b>TRIBUTO</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='12%'" );
+$st->addCellth( "<b>A&Ntilde;O</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='5%'" );
+$st->addCellth( "<b>FECHA EXIGIBIL. </b>" ,"rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='6%'");
+$st->addCellth( "<b>FECHA EMISION COACTIVA</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='6%'" );
+$st->addCellth( "<b>D&Iacute;AS <br> COMP. APLIC.<br>TIM</b>","colspan='3' style=\"border-left:1px solid #cccccc; font-size:9px\" width='14%'" );
+$st->addCellth( "<b>TOTAL <br> D&Iacute;AS<br>ACUM.</b>","rowspan='2' style=\"border-left:1px solid #cccccc; font-size:9px\"  " );
+$st->addCellth( "<b>DEUDA <br>INSOLUTA <br>EN <br>VALORES</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='10%'" );
+$st->addCellth( "<b>INTERES <br>MORATORIO <br>EN <br>VALORES</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='10%'" );
+$st->addCellth( "<b>PAGOS <br>A CUENTA</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='10%'" );
+$st->addCellth( "<b>SALDO <br> PRE <br> COACTIVO</b>","rowspan='2'style=\"border-left:1px solid #cccccc; font-size:9px\" width='11%'" );
+$st->addCellth( "<b>INTERES <br>EN <BR>COACTIVO</b>","colspan='3' style=\"border-left:1px solid #cccccc; font-size:9px\" width='9%'" );
+$st->addCellth( "<b>DEUDA TOTAL</b>","rowspan='2'style=\"border-left:1px solid #cccccc; border-right:1px solid #cccccc; font-size:9px\" width='20%'" );
+$st->addRow( "", "",1);
+
+
+$st->addRow();
+$st->addCellth( "<b>HASTA<br> 31.03.20<br>1.20%</b>","style=\"border-left:1px solid #cccccc; font-size:9px\"align='center'");
+$st->addCellth( "<b>DESDE<br> 01.04.20 <br>HASTA 31.03.21<br>1.00%</b>","style=\"border-left:1px solid #cccccc; font-size:9px\" align='center'");
+$st->addCellth( "<b>DESDE<br> 01.04.21<br>0.90%</b>","style=\"border-left:1px solid #cccccc; font-size:9px\" align='center'");
+$st->addCellth( "<b>1.20%</b>","style=\"border-left:1px solid #cccccc; font-size:9px\"align='center'");
+$st->addCellth( "<b>1.00%</b>","style=\"border-left:1px solid #cccccc; font-size:9px\"align='center'");
+$st->addCellth( "<b>TOTAL</b>","style=\"border-left:1px solid #cccccc; font-size:9px\"align='center'");
+$st->addRow( "", "",1);
+  
+  
+  for($i=0; $i<count($row_ct); $i++)
+	{
+		$array = $row_ct[$i];
+		
+		 
+		$mont=$array->deuda_act;
+		$cobro_interes=1;	
+		
+		$mon_intsant="0.012";
+		
+		
+$b_per="SELECT DATEDIFF(DAY, '".$array->fechaemite."','01/04/2020')";
+$database->setQuery( $b_per );
+$diasv = $database->loadResult();
+ 
+
+
+$diault='01/04/2020';
+if($diasv<=0){$diasv=0;$diault=$array->fechaemite; } 
+
+
+$mon_intsanto="0.01";
+		
+		  $b_per="SELECT DATEDIFF(DAY,'".$diault."','31/03/2021')";
+		$database->setQuery( $b_per );
+		$diasva = $database->loadResult();
+		if($diasva<=0){$diasva=0; $diault='01/04/2021'; }
+ 
+
+
+
+$b_per1="SELECT DATEDIFF(DAY, '".$diault."','".$array->fechavence."')";
+$database->setQuery( $b_per1 );
+$diasvalid = $database->loadResult();
+if($diasvalid<0)$diasvalid=0;
+		
+$int1=($diasv * ($mon_intsant/30)   * $array->deuda_act);
+$int2= ($diasvalid * ($mon_ints/30)   * $array->deuda_act);
+$int3= ($diasva * ($mon_intsanto/30)   * $array->deuda_act);
+	 
+$ttint1 =$ttint1+$int1;
+$ttint2 =$ttint2+$int2;	 
+		 
+		$mont_t=number_format($mont_t,2,'.','');
+		
+		$h=$h+1;
+	
+$m1=$mont+$m1;
+$m2=$array->int_moratorio+$m2;
+
+$m5=$m5+($array->deuda_act+$array->int_valores - $array->pagcta);
+
+$mont_t=($array->cargo-($array->abono-$array->deudact))+$int;
+
+$m3=($array->deuda_act+$array->int_valores + $array->int_moratorio - $array->pagcta)+$m3;
+
+$mpag=$mpag+$array->pagcta;
+$mvaal=$mvaal+$array->deuda_act;
+$mvaal1=$mvaal1+$array->int_valores;
+if($array->tipo_valor=='1'){$tpred=$tpred+$mont- $array->pagcta;}
+if($array->tipo_valor=='2'){$tarbr=$tarbr+$mont- $array->pagcta;}
+if($array->tipo_valor=='3'){$tpred=$tpred+$mont- $array->pagcta;}
+
+$st->addRow();
+$st->addCell($array->csvalor);
+$st->addCell( $array->numero." ".input_hidden("z".$h, $array->tipo_valor));
+$st->addCell( $array->tpvalor );
+if($array->tipo_valor=='3') $st->addCell( $array->anio_valor."(*)" );
+else $st->addCell( $array->anio_valor,"align='center'" );
+$st->addCell( $array->fechaemite );
+$st->addCell( $array->fechavence);
+$st->addCell( $diasv ,"align='center'");
+$st->addCell( $diasvalid ,"align='center'");
+$st->addCell( $diasva ,"align='center'");
+$st->addCell( $array->nrdias,"align='center'" );
+$st->addCell( "S/.".number_format($array->deuda_act,2,'.',',') ,"align='right'");
+$st->addCell( "S/.".number_format($array->int_valores,2,'.',',') ,"align='right'");
+$st->addCell( "S/.".number_format($array->pagcta,2,'.',',') ,"align='right'");
+$st->addCell( "S/.".number_format($array->deuda_act+$array->int_valores - $array->pagcta ,2,'.',',') ,"align='right'");
+$st->addCell( number_format($int1,2,'.',',') ,"align='right'");
+$st->addCell( number_format($int2,2,'.',',') ,"align='right'");
+$st->addCell( "S/.".number_format($array->int_moratorio,2,'.',','),"align='right'");
+$st->addCell( "S/.".number_format($array->deuda_act+$array->int_valores + $array->int_moratorio - $array->pagcta,2,'.',','),"style=\" border-right:1px solid #cccccc; \" align='right'");
+$st->addRow( "", "",1);
+ }
+ 
+ $obt_dd="exec usp_printvalor @tipoconsulta = 79,@valor='".$cod_cta."'";
+  			$database->setQuery( $obt_dd );
+  			$period = $database->loadResult();
+			
+
+$var=array();
+$cadena=number_format($m3,2,'.','');
+$longitud=strlen($cadena);
+
+for ($i=1;$i<$longitud;$i++) {
+
+$var[$i]=substr($cadena, $i-1,1);
+if($var[$i]==".")
+{$i=$longitud+3;
+}
+}
+$r_datos=implode('',$var);
+
+$var1=array();
+$cadena1=number_format($m3,2,'.','');
+$longitud1=strlen($cadena1);
+
+for ($i1=1;$i1<$longitud1+1;$i1++) {
+
+$var1[$i1]=substr($cadena1, $i1-1,1);
+}
+
+
+$resto=$var1[$longitud1-1]."".$var1[$longitud1];	
+ 
+ $st->addRow(); 
+
+ $st->addCellth( "<b>Sub Total:</b>","style=\" border-left:1px solid #cccccc; \" colspan='10'" );
+  $st->addCell( "S/.".number_format($mvaal,2,'.',',') ,"align='right'");
+   $st->addCell( "S/.".number_format($mvaal1,2,'.',',') ,"align='right'");
+
+  $st->addCell( "S/.".number_format($mpag,2,'.',',') ,"align='right'");
+ $st->addCell( "S/.".number_format($m5,2,'.',',') ,"align='right'");
+
+  $st->addCell( "S/.".number_format( $ttint1,2,'.',',') ,"align='right'");
+$st->addCell( "S/.".number_format( $ttint2,2,'.',',') ,"align='right'");
+  $st->addCell( "S/.".number_format($m2,2,'.',',') ,"align='right'");
+ $st->addCell( "S/.".number_format($m3,2,'.',',') ,"style=\" border-right:1px solid #cccccc; \" align='right'");
+ $st->addRow( "", "",1);
+  $valdr="";
+ if($array->tipo_valor=='3') $valdr= "(*) ".$period."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+ 
+ $st->addRow(); 
+  $st->addCell(   "<b>INSOL. PRED. </b>  S/. ".number_format($tpred,2,'.',',')."  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$valdr."
+  <b>INSOL. ARB. </b>  S/. ".number_format($tarbr,2,'.',',')."  
+  " ,"align='left'   style=\" font-size:10px\"  colspan='16'" );
+ $st->addCellth( "<b>Total:</b>");
+ $st->addCell(  "S/.".number_format($m3,2,'.',',') ,"style=\" border-right:1px solid #cccccc; \" align='right'");
+ $st->addRow( "", "",1);
+ 
+  $st->show();
+
+
+
+			
+?>
+ 
+ 
+<div align="justify"><br/>
+  <span class="Estilo2"><?php echo $base_le;?> <strong><?php echo "<b>".trim($contri)."</b>"; if($tiporelac!='4' && $tiporelac!=''){echo "<b> / ".$nombrrelac."</b>";} echo ",";?></strong> 
+  <?php echo $detere;?> <?php echo "<b>".number_format($m3,2,'.',',');?> (<?php echo strtoupper(num2letras($r_datos));?> y <?php echo $resto;?>/100 SOLES)</b><?php echo $pie_pag; ?>
+  </span></div>
+  
+  <br>
+   
+  <table width="100%">
+   <tr>
+     <td align="left"  width="2%" ><img src="../../images/selloccactivo.jpg" width="100px"/> </td>
+    <td align="left"><img src="../../images/sellojefcoactivo.jpg" width="200px"/></td>
+    <td></td>
+	 <td style="text-align:right;"><img src="../../images/selloauxiliarcoactivo.jpg" width="200px"/></td>
+	  <td>&nbsp;</td>
+  </tr>
+</table>
+ 
+</body> 
+</html> 

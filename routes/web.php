@@ -103,9 +103,9 @@ Route::post('/ordenTrabajo/orderControl', 'OrdenTrabajoController@createOrderCon
 Route::put('/ordenTrabajo/delete/{id}', 'OrdenTrabajoController@updateEstado')->name('ordenTrabajo.updateEstado');
 
 //CAJA
-Route::resource('/caja','CajaController')->names('cajas');
+Route::resource('/caja','CajaController')->names('cajas'); 
 Route::get('/pagos','CajaController@pagos');
-
+Route::post('/pagos/store','CajaController@storePago')->name('pagos.store');
 //ABASTECIMIENTO DE COMBUSTIBLE
 Route::resource('combustible','CombustibleController')->names('abastecimientoCombustible');
 Route::put('combustible/delete/{id}', 'CombustibleController@update1')->name('combustible.update1');
@@ -168,4 +168,4 @@ Route::get('/getAbastecimientoCombustible/{id}','CombustibleController@getDataCo
 //OTROS GASTOS OPERATIVOS
 Route::get('/otrosGastos/{id}','OtrosGastosOperativosController@index');
 Route::get('/gasto-api-search/{id}', 'OtrosGastosOperativosController@searchGasto')->name('gasto.api.search'); 
-Route::post('/store-otros-gastos', 'OtrosGastosOperativosController@storeOtrosGastos')->name('store.otros.gastos');
+Route::post('/store-otros-gastos', 'OtrosGastosOperativosController@storeOtrosGastos')->name('store.otros.gastos'); 

@@ -88,10 +88,14 @@
                        <label>Total Soles</label> 
                        <input type="text" class=" form-control form-control-sm" name="total_soles">
                     </div>
+                    <div class=" col-md-4">
+                        <label>Peso inicial</label>
+                        <input type="text" class=" form-control form-control-sm"  name="peso_inicial">
+                    </div>
                 </div>
                 <div class="row">
                     <div style="margin: auto">
-                        <input type="checkbox"  id="isAgeSelected">
+                        <input type="checkbox"  id="isAgeSelected" name="terceros_check">
                         <label>Terceros</label>
                     </div>
                 </div>
@@ -117,11 +121,11 @@
                     </div>
                     <div class=" col-md-4">
                         <label >Factura Tercero</label>
-                        <input type="file" class=" form-control form-control-sm" name="factura_tercero">
+                        <input type="file" class=" form-control form-control-sm" name="documentot_1">
                     </div>
                     <div class=" col-md-4">
                         <label >Factura Cliente</label>
-                        <input type="file"  class=" form-control form-control-sm" name="factura_cliente">
+                        <input type="file"  class=" form-control form-control-sm" name="documentot_2">
                     </div>
                 </div>
                 

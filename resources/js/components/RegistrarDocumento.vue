@@ -15,7 +15,6 @@
                             <option selected value="DNI">DNI</option>
                             <option value="BREVETE">BREVETE</option>
                         </select>
-                        
                     </div>
                     <div class="col-md-6">
                         <label for="">Documento:</label>
@@ -67,7 +66,6 @@
                         </table>
                     </div>
                 </div>
-                
             </div>
 </template>
 <script>

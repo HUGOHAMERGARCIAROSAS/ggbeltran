@@ -1,7 +1,6 @@
 @extends('layouts.layout')
 @section('css')
 @include('layouts.css')
-
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -94,7 +93,7 @@
     @include('pages.ordenTrabajo.modals.update_ordenTrabajo')
     @include('pages.ordenTrabajo.modals.combustible')
     @include('pages.ordenTrabajo.modals.OtrosGastosOrdenTrabajo')
-    @include('pages.ordenTrabajo.modals.saldo')
+    {{-- @include('pages.ordenTrabajo.modals.saldo') --}}
 
 </div>
 @endsection
@@ -103,17 +102,17 @@
 
 <script>
      if(document.getElementById('isAgeSelected').checked) {
-    $("#txtAge").show();
-    $("#txtAge2").show();
-} else {
-    $("#txtAge").hide();
-    $("#txtAge2").hide();
-}
+            $("#txtAge").show();
+            $("#txtAge2").show();
+        } else {
+            $("#txtAge").hide();
+            $("#txtAge2").hide();
+        }
 
-$('#isAgeSelected').click(function() {
-    $("#txtAge").toggle(this.checked);
-    $("#txtAge2").toggle(this.checked);
-});
+        $('#isAgeSelected').click(function() {
+            $("#txtAge").toggle(this.checked);
+            $("#txtAge2").toggle(this.checked);
+        });
 </script>
 
 @endsection

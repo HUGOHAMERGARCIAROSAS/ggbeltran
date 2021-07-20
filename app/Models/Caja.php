@@ -9,6 +9,6 @@ class Caja extends Model
     protected $table = 'cajas';
     protected $fillable = [
         'cliente_id', 'monto', 'forma_pago','nro_factura',
-        'factura', 'monto_pagar', 'saldo','user_insert'
+        'factura', 'monto_pagar', 'saldo','user_insert','orden_trabajo_id','tipo'
     ];
 }

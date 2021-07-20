@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[5],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/CompraComponent.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/operaciones/CompraComponent.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -12,23 +12,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var v_select2_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! v-select2-component */ "./node_modules/v-select2-component/dist/Select2.esm.js");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -112,152 +95,85 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   data: function data() {
     return {
       detallefacturacion: [],
-      detalleproducto: {
+      productos: [],
+      selectProducto: '',
+      detalle: {
+        id: '',
         nombre: '',
         cantidad: '',
         precio_unitario: '',
         importe: ''
-      },
-      operacion: {
-        cliente_proveedor: '',
-        fecha_emision: '',
-        operacion_gravadas: '',
-        igv: '',
-        total: '',
-        detalle_facturacion: []
-      },
-      proveedores: []
+      }
     };
   },
-  mounted: function mounted() {},
   methods: {
-    storeoperacion: function storeoperacion() {
-      this.operacion.detalle_facturacion = this.detallefacturacion; // console.log(this.operacion);
-
-      if (this.operacion.detalle_facturacion.length > 0) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/store-compra', this.operacion).then(function (_ref) {
-          var data = _ref.data;
-
-          if (data) {
-            window.location.href = '/operaciones';
-          }
-
-          if (!data) {
-            toastr.error('No se registro la compra, error en servidor!');
-          }
-        })["catch"](function (error) {
-          console.error(error.response.data);
-        });
-      } else {
-        toastr.error('No se ingreso ningún producto!');
-      }
+    limpiarData: function limpiarData() {
+      self = this;
+      self.detalle.cantidad = '';
+      self.detalle.precio_unitario = '';
+      self.detalle.importe = '';
+      self.selectProducto = '';
     },
-    abrirModalDetalleProducto: function abrirModalDetalleProducto() {
-      $('#modalDetalleFacturacion').modal('show');
-    },
-    myChangeEvent: function myChangeEvent(_ref2) {
+    changeProducto: function changeProducto(event) {
       var _this = this;
 
-      var id = _ref2.id,
-          text = _ref2.text;
-      var id_tercero = this.operacion.id_tercero;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(route('tercero', id_tercero)).then(function (response) {
-        _this.tercero = response.data;
+      var value = this.selectProducto;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/productos-api-search/' + value).then(function (_ref) {
+        var data = _ref.data;
+        self = _this;
+        self.detalle.id = data.id;
+        self.detalle.nombre = data.nombre;
+      })["catch"](function (error) {
+        console.log(error);
       });
     },
-    mySelectEvent: function mySelectEvent(_ref3) {
+    getProductos: function getProductos() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/lista-productos-text').then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.productos = data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    guardarDetalleFacturacion: function guardarDetalleFacturacion() {
+      self = this;
+      self.detalle.importe = parseFloat(this.calcularImporteDetalleProducto).toFixed(2);
+      Bus.$emit("DetalleFacturacion", self.detalle);
+      self.closeModalDetalleFacturacion();
+    },
+    closeModalDetalleFacturacion: function closeModalDetalleFacturacion() {
+      self = this;
+      self.limpiarData();
+      $('#modalDetalleFacturacion').modal('hide');
+      $("#modalNotaCredito").modal('show');
+    },
+    mySelectEvent2: function mySelectEvent2(_ref3) {
       var id = _ref3.id,
           text = _ref3.text;
       console.log({
         id: id,
         text: text
       });
-    },
-    agregarDetallefacturacion: function agregarDetallefacturacion(data) {
-      console.log(data);
-      var existeProducto = false;
-      this.detallefacturacion.forEach(function (element) {
-        if (element.nombre === data.nombre) {
-          existeProducto = true;
-        }
-      });
-
-      if (existeProducto) {
-        toastr.error('Ese producto ya se encuentra agregado!');
-      }
-
-      if (!existeProducto) {
-        this.detallefacturacion.push(JSON.parse(JSON.stringify(data)));
-        this.calcularFacturacion();
-        this.operacion.detalle_facturacion = this.detalle_facturacion;
-        console.log(this.detallefacturacion);
-      }
-    },
-    calcularOperacionesGravadas: function calcularOperacionesGravadas() {
-      var operacionesGravadas = 0.00;
-      this.detallefacturacion.forEach(function (element) {
-        operacionesGravadas += parseFloat(element.importe / 1.18);
-      });
-      return operacionesGravadas;
-    },
-    calcularTotal: function calcularTotal() {
-      return this.calcularOperacionesGravadas() + this.calcularIgv();
-    },
-    calcularIgv: function calcularIgv() {
-      var igv = 0.18;
-      return this.calcularOperacionesGravadas() * igv;
-    },
-    calcularFacturacion: function calcularFacturacion() {
-      this.operacion.operaciones_gravadas = parseFloat(this.calcularOperacionesGravadas()).toFixed(2);
-      this.operacion.igv = parseFloat(this.calcularIgv()).toFixed(2);
-      this.operacion.total = parseFloat(this.calcularTotal()).toFixed(2);
-    },
-    removeItemDetalleFacturacion: function removeItemDetalleFacturacion(index) {
-      this.detallefacturacion.splice(index, 1);
-      toastr.info('Producto eliminado de la Compra!');
-      this.calcularFacturacion();
     }
   },
-  beforeCreate: function beforeCreate() {
-    var _this2 = this;
-
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/proveedorProducto').then(function (res) {
-      console.log(res.data);
-
-      var _iterator = _createForOfIteratorHelper(res.data),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var value = _step.value;
-
-          _this2.proveedores.push({
-            id: value.id,
-            razon_social: value.razon_social
-          });
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-    });
-  },
   created: function created() {
-    var _this3 = this;
-
-    Bus.$on("DetalleFacturacion", function (data) {
-      _this3.agregarDetallefacturacion(JSON.parse(JSON.stringify(data)));
-    });
+    this.getProductos();
+  },
+  computed: {
+    calcularImporteDetalleProducto: function calcularImporteDetalleProducto() {
+      return parseFloat(this.detalle.cantidad * this.detalle.precio_unitario).toFixed(2);
+    }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/CompraComponent.vue?vue&type=template&id=19c0868a&":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/operaciones/CompraComponent.vue?vue&type=template&id=19c0868a& ***!
-  \******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840&":
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -269,290 +185,255 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      { staticClass: "row clearfix" },
-      [
-        _c("div", { staticClass: "col-lg-12" }, [
-          _c(
-            "div",
-            { staticClass: "card", staticStyle: { background: "white" } },
-            [
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade xd2",
+      attrs: {
+        id: "modalDetalleFacturacion",
+        tabindex: "10000",
+        role: "dialog",
+        "aria-hidden": "true"
+      }
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+        [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-sm-9" }, [
+                  _c("label", [_vm._v("Código/Descripción")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selectProducto,
+                          expression: "selectProducto"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "2" },
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selectProducto = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          function($event) {
+                            return _vm.changeProducto($event)
+                          }
+                        ],
+                        select: function($event) {
+                          return _vm.mySelectEvent2($event)
+                        }
+                      }
+                    },
+                    _vm._l(_vm.productos, function(item, index) {
+                      return _c(
+                        "option",
+                        { key: index, domProps: { value: item.id } },
+                        [_vm._v(_vm._s(item.text))]
+                      )
+                    }),
+                    0
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Cantidad")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.detalle.cantidad,
+                          expression: "detalle.cantidad"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "1", required: "" },
+                      domProps: { value: _vm.detalle.cantidad },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.detalle, "cantidad", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Precio Compra")]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group" }, [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.detalle.precio_unitario,
+                            expression: "detalle.precio_unitario"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", required: "" },
+                        domProps: { value: _vm.detalle.precio_unitario },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.detalle,
+                              "precio_unitario",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-3" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Precio Total")]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "input-group" }, [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.calcularImporteDetalleProducto,
+                            expression: "calcularImporteDetalleProducto"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", disabled: "", required: "" },
+                        domProps: { value: _vm.calcularImporteDetalleProducto },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.calcularImporteDetalleProducto =
+                              $event.target.value
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _vm.selectProducto && _vm.detalle.precio_unitario > 0
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-pill",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.guardarDetalleFacturacion()
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    Guardar Detalle\n                "
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c(
-                "form",
+                "button",
                 {
+                  staticClass: "btn btn-secondary btn-pill",
+                  attrs: { type: "button", "data-dismiss": "modal" },
                   on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.storeoperacion()
+                    click: function($event) {
+                      return _vm.closeModalDetalleFacturacion()
                     }
                   }
                 },
-                [
-                  _c("div", { staticClass: "header" }, [
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-sm-6" }, [
-                        _c("label", [_vm._v("Proveedor: ")]),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.operacion.cliente_proveedor,
-                                expression: "operacion.cliente_proveedor"
-                              }
-                            ],
-                            staticClass: "form-control form-control-sm",
-                            attrs: { required: "" },
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.operacion,
-                                  "cliente_proveedor",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              }
-                            }
-                          },
-                          _vm._l(_vm.proveedores, function(proveedor, index) {
-                            return _c(
-                              "option",
-                              { key: index, domProps: { value: proveedor.id } },
-                              [_vm._v(_vm._s(proveedor.razon_social))]
-                            )
-                          }),
-                          0
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-sm-6" }, [
-                        _c("label", [_vm._v("F. de Emisión: ")]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.operacion.fecha_emision,
-                              expression: "operacion.fecha_emision"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "date", required: "" },
-                          domProps: { value: _vm.operacion.fecha_emision },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.operacion,
-                                "fecha_emision",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-lg-12", attrs: { align: "right" } },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-success btn-elevate btn-pill",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                return _vm.abrirModalDetalleProducto()
-                              }
-                            }
-                          },
-                          [_vm._v("Agregar Item\n                            ")]
-                        )
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "body table-responsive" }, [
-                    _c("table", { staticClass: "table table-hover" }, [
-                      _vm._m(1),
-                      _vm._v(" "),
-                      _c(
-                        "tbody",
-                        _vm._l(_vm.detallefacturacion, function(item, index) {
-                          return _c("tr", { key: item.id }, [
-                            _c("th", { attrs: { scope: "row" } }, [
-                              _vm._v(_vm._s(index + 1))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", {
-                              domProps: { textContent: _vm._s(item.nombre) }
-                            }),
-                            _vm._v(" "),
-                            _c("td", {
-                              domProps: { textContent: _vm._s(item.cantidad) }
-                            }),
-                            _vm._v(" "),
-                            _c("td", {
-                              domProps: {
-                                textContent: _vm._s(item.precio_unitario)
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("td", {
-                              domProps: { textContent: _vm._s(item.importe) }
-                            }),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _c(
-                                "button",
-                                {
-                                  staticClass:
-                                    "btn btn-danger btn-elevate btn-circle btn-icon btn-sm",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.removeItemDetalleFacturacion(
-                                        index
-                                      )
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "fa fa-trash" })]
-                              )
-                            ])
-                          ])
-                        }),
-                        0
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c("div", { staticClass: "offset-8 col-md-4" }, [
-                        _c("div", { staticClass: "m-t-20" }, [
-                          _c("p", [
-                            _vm._v(
-                              "Operaciones Gravadas:\n                                        "
-                            ),
-                            _c("span", {
-                              staticClass: "float-right",
-                              domProps: {
-                                textContent: _vm._s(
-                                  _vm.operacion.operaciones_gravadas
-                                )
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("p", [
-                            _vm._v("IGV (18%): "),
-                            _c("span", {
-                              staticClass: "float-right",
-                              domProps: {
-                                textContent: _vm._s(_vm.operacion.igv)
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("p", [
-                            _vm._v("Total: "),
-                            _c("span", {
-                              staticClass: "float-right",
-                              domProps: {
-                                textContent: _vm._s(_vm.operacion.total)
-                              }
-                            })
-                          ])
-                        ])
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-sm-4" }),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-sm-4", attrs: { align: "center" } },
-                      [
-                        _vm.detallefacturacion.length > 0
-                          ? _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-dark btn-block",
-                                attrs: { type: "submit" }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                        GUARDAR"
-                                )
-                              ]
-                            )
-                          : _vm._e()
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-sm-4" })
-                  ])
-                ]
+                [_vm._v("\n                    Cancelar\n                ")]
               )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("facturacion-detalle-modal-compra-component")
-      ],
-      1
-    )
-  ])
+            ])
+          ])
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("h5", [_c("strong", [_vm._v("Lista de productos")])])
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [
+        _c("i", { staticClass: "fas fa-list mr-1" }),
+        _vm._v(" Detalle de Venta")
+      ]),
+      _vm._v(" "),
+      _c("button", {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      })
+    ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("#")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Producto")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Cantidad")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Precio")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Importe")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Opciones")])
-      ])
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("S/. ")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("span", { staticClass: "input-group-text" }, [_vm._v("S/. ")])
     ])
   }
 ]
@@ -562,17 +443,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/operaciones/CompraComponent.vue":
-/*!*****************************************************************!*\
-  !*** ./resources/js/components/operaciones/CompraComponent.vue ***!
-  \*****************************************************************/
+/***/ "./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue ***!
+  \****************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _CompraComponent_vue_vue_type_template_id_19c0868a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CompraComponent.vue?vue&type=template&id=19c0868a& */ "./resources/js/components/operaciones/CompraComponent.vue?vue&type=template&id=19c0868a&");
-/* harmony import */ var _CompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CompraComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/operaciones/CompraComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _FacturacionDetalleModalCompraComponent_vue_vue_type_template_id_a76a5840___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840& */ "./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840&");
+/* harmony import */ var _FacturacionDetalleModalCompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -582,9 +463,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _CompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _CompraComponent_vue_vue_type_template_id_19c0868a___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _CompraComponent_vue_vue_type_template_id_19c0868a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _FacturacionDetalleModalCompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FacturacionDetalleModalCompraComponent_vue_vue_type_template_id_a76a5840___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FacturacionDetalleModalCompraComponent_vue_vue_type_template_id_a76a5840___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -594,38 +475,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/operaciones/CompraComponent.vue"
+component.options.__file = "resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/operaciones/CompraComponent.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/components/operaciones/CompraComponent.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************!*\
+  !*** ./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./CompraComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/CompraComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FacturacionDetalleModalCompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FacturacionDetalleModalCompraComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/operaciones/CompraComponent.vue?vue&type=template&id=19c0868a&":
-/*!************************************************************************************************!*\
-  !*** ./resources/js/components/operaciones/CompraComponent.vue?vue&type=template&id=19c0868a& ***!
-  \************************************************************************************************/
+/***/ "./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840&":
+/*!***********************************************************************************************************************!*\
+  !*** ./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840& ***!
+  \***********************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompraComponent_vue_vue_type_template_id_19c0868a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./CompraComponent.vue?vue&type=template&id=19c0868a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/CompraComponent.vue?vue&type=template&id=19c0868a&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompraComponent_vue_vue_type_template_id_19c0868a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FacturacionDetalleModalCompraComponent_vue_vue_type_template_id_a76a5840___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue?vue&type=template&id=a76a5840&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FacturacionDetalleModalCompraComponent_vue_vue_type_template_id_a76a5840___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompraComponent_vue_vue_type_template_id_19c0868a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FacturacionDetalleModalCompraComponent_vue_vue_type_template_id_a76a5840___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

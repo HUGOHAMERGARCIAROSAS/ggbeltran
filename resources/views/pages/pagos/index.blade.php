@@ -38,28 +38,43 @@
                                     <th class="text-center">Orden de Trabajo</th>
                                     <th class="text-center">Cliente</th>
                                     <th class="text-center">Moneda</th>
-                                    <th class="text-center">Monto</th>
-                                    <th class="text-center">Monto Pendiente</th>
+                                    <th class="text-center">Deuda Total</th>
+                                    <th class="text-center">Monto Pagado</th>
+                                    <th class="text-center">Deuda Restante</th>
                                     <th class="text-center">Estado</th>
                                     <th class="text-center">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody> 
+                                @foreach ($orders as $key=>$item)
                                 <tr>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">{{str_pad($item->id, 6, "0", STR_PAD_LEFT)}}</td>
+                                    <td class="text-center">{{$item->clientes->razon_social}}</td>
+                                    @if ($item->moneda==1)
+                                        <td class="text-center">PEN</td>
+                                    @endif
+                                    @if ($item->moneda==0)
+                                        <td class="text-center">USD</td>
+                                    @endif
+                                    <td class="text-center">{{$item->monto}}</td>
+                                    <td class="text-center">{{$item->pendiente}}</td>
+                                    <td class="text-center">{{$item->monto - $item->pendiente}}</td>
+                                    @if ($item->estado==1)
+                                    <td class="text-center">PENDIENTE</td>
+                                    @endif
+                                    @if ($item->estado==0)
+                                    <td class="text-center">CANCELADO</td>
+                                    @endif
                                     <td class="text-center">
-                                        {{-- <a href="{{route('cajas.edit',$item->id)}}" class="btn btn-sm btn-info"><i class="fa fa-money"></i></a> --}}
-                                        <button type="button" class="btn btn-sm btn-info"> 
+                                        @if ($item->estado==1)
+                                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#registerPago{{$item->id}}"> 
                                             <i class="fa fa-money"></i>
                                          </button>
+                                        @endif
                                     </td>
-                                </tr>                            
+                                </tr> 
+                                @endforeach                              
                             </tbody>
                         </table>
                     </div>
@@ -67,6 +82,7 @@
             </div>
         </div>
     </div>
+    @include('pages.pagos.modals.register_pago')
 </div>
 @endsection
 @section('js')

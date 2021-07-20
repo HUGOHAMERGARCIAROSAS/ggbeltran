@@ -60,11 +60,33 @@ class OrdenTrabajoController extends Controller
         $order->total  = $request->total;
         $order->moneda  = $request->moneda;
         $order->total_soles  = $request->total_soles;
-        $order->terceros_check  = $request->terceros_check;
         $order->empresa_tercera_id  = $request->empresa_tercera_id;
+        if($request->terceros_check == null){
+            $order->terceros_check=0;
+        }else{
+            $order->terceros_check=1;
+        }
+
         $order->precio_tercero  = $request->precio_tercero;
         $order->monto_tercero  = $request->monto_tercero;
         $order->usuario_created  = $request->usuario_created;
+        $order->peso_inicial  = $request->peso_inicial;
+        if ($request->file('documentot_2')) {
+        // dd($request->file('archivos'));
+        $file = $request->file('documentot_2');
+        $name = 'documento_personal_' . time() . '.' . $file->getClientOriginalExtension();
+        $path = public_path() . '/documentos'.'/'.'personal'.'/';
+        $file->move($path, $name);
+        $order->documentot_2 = $name;
+        }
+        if ($request->file('documentot_1')) {
+        // dd($request->file('archivos'));
+        $file = $request->file('documentot_1');
+        $name = 'documento_personal_' . time() . '.' . $file->getClientOriginalExtension();
+        $path = public_path() . '/documentos'.'/'.'personal'.'/';
+        $file->move($path, $name);
+        $order->documentot_1 = $name;
+        }
         $order->activo  = 1;
         $order->estado  = 1;
 

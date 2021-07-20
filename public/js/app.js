@@ -2267,8 +2267,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -16423,22 +16421,22 @@ window.Bus = new Vue();
 // Vue.component('crear-compra-component', require('./components/operaciones/CompraComponent.vue').default);
 
 Vue.component("crear-compra-component", function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(8)]).then(__webpack_require__.bind(null, /*! ./components/operaciones/CompraComponent.vue */ "./resources/js/components/operaciones/CompraComponent.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./components/operaciones/CompraComponent.vue */ "./resources/js/components/operaciones/CompraComponent.vue"));
 });
 Vue.component("crear-combustible-component", function () {
   return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./components/CombustibleComponent.vue */ "./resources/js/components/CombustibleComponent.vue"));
 });
 Vue.component("facturacion-detalle-modal-compra-component", function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ./components/operaciones/FacturacionDetalleModalCompraComponent.vue */ "./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./components/operaciones/FacturacionDetalleModalCompraComponent.vue */ "./resources/js/components/operaciones/FacturacionDetalleModalCompraComponent.vue"));
 });
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('gasto-component', __webpack_require__(/*! ./components/GastosComponent.vue */ "./resources/js/components/GastosComponent.vue")["default"]);
 Vue.component('saldo-component', __webpack_require__(/*! ./components/SaldoComponent.vue */ "./resources/js/components/SaldoComponent.vue")["default"]);
 Vue.component("crear-otros-gastos-component", function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(7)]).then(__webpack_require__.bind(null, /*! ./components/CrearOtrosGastosComponent.vue */ "./resources/js/components/CrearOtrosGastosComponent.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./components/CrearOtrosGastosComponent.vue */ "./resources/js/components/CrearOtrosGastosComponent.vue"));
 });
 Vue.component("crear-otros-gastos-detalle-component", function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, /*! ./components/CrearDetalleOtrosGastosComponent.vue */ "./resources/js/components/CrearDetalleOtrosGastosComponent.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ./components/CrearDetalleOtrosGastosComponent.vue */ "./resources/js/components/CrearDetalleOtrosGastosComponent.vue"));
 });
 Vue.component('registrar-documento-personal', __webpack_require__(/*! ./components/RegistrarDocumento.vue */ "./resources/js/components/RegistrarDocumento.vue")["default"]);
 /**
@@ -16747,8 +16745,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\PRACTICAS\2021\TRANSPORTE\grupoBeltran-v3\ggbeltran\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\PRACTICAS\2021\TRANSPORTE\grupoBeltran-v3\ggbeltran\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\HUGO\Desktop\ggbeltran\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\HUGO\Desktop\ggbeltran\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
