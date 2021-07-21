@@ -85,11 +85,22 @@
 @include('layouts.js')
 <script src="{{ asset('js/app.js') }}"></script>
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 @if($count>0){
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         Swal.fire('Existen documentos vencidos, a revisar!')
     </script>
 @endif
+<script>
+    function AgregarDocumentos(){
+        Swal.fire({
+        title: "Éxito!",
+        text: "Se registraron correctamente los documentos!",
+        icon: "success",
+        button: "Aww yiss!",
+        });
 
+    }
+</script>
 @endsection

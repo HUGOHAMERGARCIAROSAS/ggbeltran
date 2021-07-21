@@ -156,4 +156,8 @@ class UnidadController extends Controller
         $pdf = PDF::loadView('pages.unidades.pdf_unidades',compact('unidades'));
         return $pdf->download('unidades-lista.pdf');
     }
+    public function getVehiculos(){
+        $unidades = Vehiculo::where('activo','1')->get();
+        return $unidades;
+    }
 }

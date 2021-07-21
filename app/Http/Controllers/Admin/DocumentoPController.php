@@ -84,7 +84,8 @@ class DocumentoPController extends Controller
             $documentoP->archivos = $name;
             }
         $documentoP->save();
-        return back();
+        $idDocumentoP=DocumentoP::latest('id')->first();
+        return $idDocumentoP;
     }
 
     /**
@@ -147,7 +148,10 @@ class DocumentoPController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $documentosP = DocumentoP::findOrFail($id);
+        $documentosP->estado  = 0;
+        $documentosP->usuario_deleted  = auth()->user()->name;
+        $documentosP->save();
     }
 
     public function update1(Request $request,$id)

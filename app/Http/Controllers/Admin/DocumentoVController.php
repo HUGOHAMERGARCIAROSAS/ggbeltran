@@ -76,7 +76,8 @@ class DocumentoVController extends Controller
             $documentoV->archivos = $name;
         }
         $documentoV->save();
-        return back();
+        $idDocumentoV=DocumentoV::latest('id')->first();
+        return $idDocumentoV;
     }
 
     /**
@@ -139,7 +140,10 @@ class DocumentoVController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $documentoV = DocumentoV::findOrFail($id);
+        $documentoV->estado  = 0;
+        $documentoV->usuario_deleted  = auth()->user()->name;
+        $documentoV->save();
     }
     public function update1(Request $request,$id)
     {
@@ -149,4 +153,5 @@ class DocumentoVController extends Controller
         $documentoV->save();
         return back();
     }
+    
 }

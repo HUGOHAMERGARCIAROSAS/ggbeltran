@@ -73,6 +73,7 @@
                             <ul>
                                 <li class="active"><a href="{{route('proproductos.index')}}">PROVEEDORES</a></li>
                                 <li class="active"><a href="{{ route('productos.index') }}">PRODUCTOS</a></li>
+                                <li class="active"><a href="{{ route('centro_Costos.index') }}">CENTRO DE COSTOS</a></li>
                                 <li class="active"><a href="{{route('operaciones')}}">REGISTRO DE COMPRAS</a></li>
                             </ul>
                         </li>

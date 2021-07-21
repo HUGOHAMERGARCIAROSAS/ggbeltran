@@ -1,3 +1,6 @@
+DROP DATABASE if exists grupobeltran ;
+create DATABASE grupobeltran;
+use grupobeltran;
 -- phpMyAdmin SQL Dump
 -- version 5.0.3
 -- https://www.phpmyadmin.net/

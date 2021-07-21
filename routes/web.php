@@ -78,6 +78,7 @@ Route::post('/saveDocumentopP','Admin\DocumentoPController@store');
 //DOCUMENTOS DE VEHÍCULO
 Route::resource('/documentosV', 'Admin\DocumentoVController')->names('documentosV');
 Route::put('documentosV/delete/{id}', 'Admin\DocumentoVController@update1')->name('documentosV.update1');
+Route::post('/saveDocumentopV','Admin\DocumentoVController@store');
 
 
 //UNIDADES
@@ -87,6 +88,7 @@ Route::put('/unidades/delete/{id}', 'Admin\UnidadController@update1')->name('uni
 Route::post('uimport-list-excel', 'Admin\UnidadController@importExcel')->name('unidades.import.excel');
 Route::get('uexport-list-excel', 'Admin\UnidadController@exportExcel')->name('unidades.export.excel');
 Route::get('uexport-list-pdf', 'Admin\UnidadController@exportPdf')->name('unidades.export.pdf');
+Route::get('/getUnidades','Admin\UnidadController@getVehiculos');
 
 //PROVEEDORES
 
@@ -169,3 +171,6 @@ Route::get('/getAbastecimientoCombustible/{id}','CombustibleController@getDataCo
 Route::get('/otrosGastos/{id}','OtrosGastosOperativosController@index');
 Route::get('/gasto-api-search/{id}', 'OtrosGastosOperativosController@searchGasto')->name('gasto.api.search'); 
 Route::post('/store-otros-gastos', 'OtrosGastosOperativosController@storeOtrosGastos')->name('store.otros.gastos'); 
+
+///CENTRO DE COSTOS
+Route::resource('/centroCostos','CentroCostosController')->names('centro_Costos');

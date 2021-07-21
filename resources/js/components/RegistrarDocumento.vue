@@ -43,11 +43,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                        <table class="table table-bordered border-primary">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>Personal</th>
                                     <th>Tipo</th>
                                     <th>Nro Documento</th>
                                     <th>Documento</th>
@@ -56,14 +57,15 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(documento,index) in detalleDocumento" :key="index">
-                                    <th>{{index}}</th>
+                                    <th>{{documento.nombrePersonal}}</th>
                                     <th>{{documento.tipo_documento}}</th>
                                     <th>{{documento.nro_documento}}</th>
                                     <th>{{documento.nombreFile}}</th>
-                                    <th><button type="button" class="btn btn-sm btn-danger"> <i class="fa fa-remove"></i> </button></th>
+                                    <th><button @click="eliminarDocumentoPersonal(documento,index)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i> </button></th>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -86,22 +88,9 @@ export default{
     },
     methods:{
         fileUpdate(e){
-            console.log(e.target.files[0])
             this.file = e.target.files[0]
-            console.log(this.file.name)
         },
         async agregar(){
-            console.log("agregar")
-            var detalleDocumentoObject = {
-                user_id:this.user_id,
-                fecha_Emision: this.fecha_Emision,
-                tipo_documento:this.tipo_documento,
-                nro_documento:this.nro_documento,
-                fecha_vencimiento:this.fecha_vencimiento,
-                nombreFile:this.file.name
-            }
-            this.detalleDocumento.push(detalleDocumentoObject)
-
             let formData = new FormData()
             formData.append('archivos',this.file)
             formData.append('user_id',this.user_id)
@@ -115,7 +104,23 @@ export default{
                 data:formData
             }
             await axios(request).then((res)=>{
-                console.log(res)
+                    var namePersonal=null;
+                        for(var personal of this.personales){
+                                if(personal.id==this.user_id){
+                                    namePersonal=personal.nombre;
+                                }
+                        }
+                        var detalleDocumentoObject = {
+                        user_id:this.user_id,
+                        fecha_Emision: this.fecha_Emision,
+                        tipo_documento:this.tipo_documento,
+                        nro_documento:this.nro_documento,
+                        fecha_vencimiento:this.fecha_vencimiento,
+                        nombreFile:this.file.name,
+                        id:res.data.id,
+                        nombrePersonal:namePersonal
+                    }
+                    this.detalleDocumento.push(detalleDocumentoObject)
             }
             ).catch(e=>{
 
@@ -125,7 +130,6 @@ export default{
         async getPersonal(){
             await axios.get('/getPersonal')
             .then(res=>{
-                console.log(res.data);
                     for(var value of res.data){
                         this.personales.push({
                             id:value.id,nombre:value.name
@@ -133,7 +137,15 @@ export default{
                     }
             })
 
+        },
+        async eliminarDocumentoPersonal(item,index){
+            console.log(item);
+            await axios.delete(`/documentosP/${item.id}`)
+                .then(()=>{
+                    this.detalleDocumento.splice(index,1);
+                })     
         }
+
 
     },
     beforeCreate(){

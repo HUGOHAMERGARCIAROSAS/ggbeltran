@@ -30,6 +30,7 @@ Vue.component('saldo-component',require('./components/SaldoComponent.vue').defau
 Vue.component("crear-otros-gastos-component", () => import("./components/CrearOtrosGastosComponent.vue"));
 Vue.component("crear-otros-gastos-detalle-component", () => import("./components/CrearDetalleOtrosGastosComponent.vue"));
 Vue.component('registrar-documento-personal',require('./components/RegistrarDocumento.vue').default);
+Vue.component('registrar-documento-vehiculo',require('./components/RegistrarDocumentosVehiculo.vue').default)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
