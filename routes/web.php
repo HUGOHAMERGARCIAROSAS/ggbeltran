@@ -168,9 +168,12 @@ Route::post('/store-combustible', 'CombustibleController@storeCombustible')->nam
 Route::get('/getAbastecimientoCombustible/{id}','CombustibleController@getDataCombustible');
 
 //OTROS GASTOS OPERATIVOS
+Route::resource('/otrosgGastos','OtrosGastosOperativosController');
 Route::get('/otrosGastos/{id}','OtrosGastosOperativosController@index');
 Route::get('/gasto-api-search/{id}', 'OtrosGastosOperativosController@searchGasto')->name('gasto.api.search'); 
 Route::post('/store-otros-gastos', 'OtrosGastosOperativosController@storeOtrosGastos')->name('store.otros.gastos'); 
 
 ///CENTRO DE COSTOS
 Route::resource('/centroCostos','CentroCostosController')->names('centro_Costos');
+//SALDO
+Route::resource('saldos','SaldoController')->names('saldo');

@@ -9,6 +9,7 @@ use App\Models\Ruta;
 use App\Models\Order;
 use App\User;
 use App\Models\OrderControl;
+use App\Models\TerciarioProveedor;
 use App\Models\Vehiculo;
 
 class OrdenTrabajoController extends Controller
@@ -25,7 +26,8 @@ class OrdenTrabajoController extends Controller
         $unidades = Vehiculo::get()->where('activo','1');
         $orders = Order::where('activo','1')->get();
         $lugar = Lugar::where('tipo','2')->get();
-        return view('pages.ordenTrabajo.index')->with(compact('clientes','conductores','rutas','unidades','orders','lugar'));
+        $terceros = TerciarioProveedor::where('tipo','1')->where('activo','1')->get();
+        return view('pages.ordenTrabajo.index')->with(compact('clientes','conductores','rutas','unidades','orders','lugar','terceros'));
     }
     public function create()
     {

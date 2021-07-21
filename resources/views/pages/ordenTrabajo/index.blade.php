@@ -75,7 +75,7 @@
                                         <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#registerKilometrosPesos{{$item->id}}"> <i class="fa fa-eye"></i> </button>                            
                                         <a href="/abastecimientoCombustible/{{$item->id}}" type="button" class="btn btn-sm btn-primary"><i class="fa fa-bus"></i></a>
                                         <a href="/otrosGastos/{{$item->id}}" type="button" class="btn btn-sm btn-warning"><i class="fa fa-bars"></i></a>
-                                        {{-- <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#OtrosGastosOrdenTrabajo{{$item->id}}"><i class="fa fa-bars"></i></button> --}}
+                        
                                         <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#saldoOrdenTrabajo{{$item->id}}"><i class="fa fa-money"></i></button>
                                         <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#updateOrdenTrabajo{{$item->id}}"> <i class=" fa fa-edit"></i> </button>
                                     </td>
@@ -93,13 +93,14 @@
     @include('pages.ordenTrabajo.modals.update_ordenTrabajo')
     @include('pages.ordenTrabajo.modals.combustible')
     @include('pages.ordenTrabajo.modals.OtrosGastosOrdenTrabajo')
-    {{-- @include('pages.ordenTrabajo.modals.saldo') --}}
+     @include('pages.ordenTrabajo.modals.saldo') 
 
 </div>
 @endsection
 @section('js')
 @include('layouts.js') 
-
+<script src="{{ asset('js/app.js') }}"></script>
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <script>
      if(document.getElementById('isAgeSelected').checked) {
             $("#txtAge").show();

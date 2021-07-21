@@ -103,7 +103,10 @@
                     <div class=" col-md-4">
                         <label >Empresa Tercera</label>
                         <select name="empresa_tercera_id" class="form-control">
-                            <option value="1">Empresa 1</option>
+                            @foreach($terceros as $key => $value)
+                            <option value="{{ $value->id }}">{{ $value->razon_social }}</option>
+                            @endforeach
+                            
                         </select>
                     </div>
                     <div class=" col-md-4">

@@ -9,8 +9,20 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
 //
 //
 //
@@ -113,7 +125,7 @@ var lastParam = url.split("/").slice(-1)[0];
       var url = '/store-combustible'; //Ruta que hemos creado para enviar una tarea y guardarla
 
       console.log(this.operacion);
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, this.operacion).then(function (_ref) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post(url, this.operacion).then(function (_ref) {
         var data = _ref.data;
 
         if (data) {
@@ -143,7 +155,7 @@ var lastParam = url.split("/").slice(-1)[0];
       var _this2 = this;
 
       var value = this.selectLugar;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/lugares-api-search/' + value).then(function (_ref2) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/lugares-api-search/' + value).then(function (_ref2) {
         var data = _ref2.data;
         self = _this2;
         self.operacion.lugar_id = data.id;
@@ -155,7 +167,7 @@ var lastParam = url.split("/").slice(-1)[0];
     getProductos: function getProductos() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/lista-lugares-text').then(function (_ref3) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/lista-lugares-text').then(function (_ref3) {
         var data = _ref3.data;
         _this3.lugares = data;
       })["catch"](function (error) {
@@ -165,9 +177,32 @@ var lastParam = url.split("/").slice(-1)[0];
     getCombustible: function getCombustible() {
       var _this4 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/getAbastecimientoCombustible/' + lastParam).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/getAbastecimientoCombustible/' + lastParam).then(function (res) {
         _this4.combustible = res.data;
       });
+    },
+    eliminar: function eliminar(item, index) {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                console.log(item.id);
+
+                _this5.combustible.splice(index, 1); //await axios.delete(`/otrosgGastos/${item.id}`)
+                //   .then(()=>{
+                //   })     
+
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   },
   computed: {},
@@ -411,7 +446,23 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(item.nro_ticket))]),
                   _vm._v(" "),
-                  _vm._m(3, true)
+                  _vm._m(3, true),
+                  _vm._v(" "),
+                  _c("th", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-danger",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.eliminar(item, index)
+                          }
+                        }
+                      },
+                      [_c("i", { staticClass: "fa fa-remove" })]
+                    )
+                  ])
                 ])
               }),
               0
@@ -467,7 +518,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Nro Ticket")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Ticket")])
+        _c("th", [_vm._v("Ticket")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Opciones")])
       ])
     ])
   },

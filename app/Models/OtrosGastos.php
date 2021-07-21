@@ -14,7 +14,9 @@ class OtrosGastos extends Model
         'gasto_operativo',
         'importe',
         'file',
-        'orden_trabajo_id'
+        'orden_trabajo_id',
+        'usuario_deleted',
+        'estado'
     ];
 
     public function setRegistrationFromAttribute($value)

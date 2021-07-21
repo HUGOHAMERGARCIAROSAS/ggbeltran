@@ -46,6 +46,7 @@ class OtrosGastosOperativosController extends Controller
                 $detalle_operacion->gasto_operativo = $item['gasto_operativo'];
                 $detalle_operacion->importe = $item['importe'];
                 $detalle_operacion->orden_trabajo_id = $item['id'];
+                $detalle_operacion->estado=1;
                 $detalle_operacion->save();
             }
 
@@ -121,6 +122,9 @@ class OtrosGastosOperativosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $gasto = OtrosGastos::findOrFail($id);
+        $gasto->estado  = 0;
+        $gasto->usuario_deleted  = auth()->user()->name;
+        $gasto->save();
     }
 }

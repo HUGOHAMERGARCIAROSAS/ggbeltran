@@ -49,6 +49,7 @@
                 <th>Precio</th> 
                 <th>Nro Ticket</th> 
                 <th>Ticket</th> 
+                <th>Opciones</th>
             </tr>
         </thead>
         <tbody id="bodytableAbastecimiento">
@@ -64,6 +65,9 @@
                             <i class=" fa fa-download"></i>
                         </a>
                     </td>
+                    <th>
+                        <button @click="eliminar(item,index)" type="button" class="btn btn-sm btn-danger"><i class="fa fa-remove"></i> </button>
+                    </th>
                     
                 </tr>
         </tbody>
@@ -142,6 +146,14 @@ export default {
                  axios.get('/getAbastecimientoCombustible/'+lastParam).then(res=>{
                 this.combustible = res.data;
                 })
+            },
+            async eliminar(item,index){
+                console.log(item.id);
+                this.combustible.splice(index,1);
+                //await axios.delete(`/otrosgGastos/${item.id}`)
+                 //   .then(()=>{
+                        
+                 //   })     
             }
         },
         computed:{
